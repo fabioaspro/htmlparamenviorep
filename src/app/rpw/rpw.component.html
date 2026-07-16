@@ -1,0 +1,16 @@
+<po-modal #timer [p-title]=labelPedExec
+    p-size="auto" 
+    p-click-out="false" 
+    [p-hide-close]="true"
+    [p-hide-close]="true"
+    [p-primary-action]="acaoCancelarTimer">
+    <div class="po-font-title" style="display: flex;gap: 10px;">
+        <div  [ngClass]="labelTimer === 'Arquivo liberado !' ? 'green shake1' : 'red'">
+            <i  [ngClass]="labelTimer === 'Arquivo liberado !' ? 'bi bi-alarm-fill' : 'bi bi-alarm'"></i>
+        </div>
+        <div>{{labelTimer}}</div>
+        <div [ngClass]="labelTimer === 'Arquivo liberado !' ? 'hide' : 'loading'">...</div>
+    </div>  
+    <p class="po-font-text-large">{{labelTimerDetail}}</p> 
+    
+</po-modal>

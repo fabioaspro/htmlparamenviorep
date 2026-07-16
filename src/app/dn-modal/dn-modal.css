@@ -1,0 +1,59 @@
+
+.backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal {
+  background: #fff;
+  padding: 20px;
+  width: 450px;
+  border-radius: 6px;
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.btn {
+  padding: 6px 14px;
+  border: none;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.cancel {
+  background: #ccc;
+}
+
+.confirm {
+  background: #d32f2f;
+  color: white;
+}
+
+.msg-confirm {
+  font-size: 14px;
+}
+
+.msg-text {
+  margin-bottom: 10px;
+}
+
+.msg-list {
+  padding-left: 16px;
+}
+
+.msg-list li {
+  margin-bottom: 4px;
+}

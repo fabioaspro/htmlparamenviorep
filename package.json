@@ -1,0 +1,46 @@
+{
+  "name": "htmlparamenviorep",
+  "version": "0.0.0",
+  "scripts": {
+    "ng": "ng",
+    "start": "ng serve",
+    "build": "ng build",
+    "watch": "ng build --watch --configuration development",
+    "test": "ng test"
+  },
+  "private": true,
+  "packageManager": "npm@10.8.2",
+  "dependencies": {
+    "@angular/common": "^21.0.3",
+    "@angular/compiler": "^21.0.3",
+    "@angular/core": "^21.0.3",
+    "@angular/forms": "^21.0.3",
+    "@angular/platform-browser": "^21.0.3",
+    "@angular/router": "^21.0.3",
+    "@po-ui/ng-components": "^21.10.0",
+    "@po-ui/ng-templates": "^21.10.0",
+    "@po-ui/style": "^21.10.0",
+    "@totvs/po-theme": "^21.10.0",
+    "bootstrap-icons": "^1.13.1",
+    "exceljs": "^4.4.0",
+    "file-saver": "^2.0.5",
+    "ngx-extended-pdf-viewer": "^27.0.0",
+    "ngx-mask": "^21.0.1",
+    "path": "^0.12.7",
+    "querystring": "^0.2.1",
+    "rxjs": "~7.8.1",
+    "tslib": "^2.6.2",
+    "zone.js": "~0.15.0"
+  },
+  "devDependencies": {
+    "@angular/build": "^21.0.3",
+    "@angular/cli": "^21.0.3",
+    "@angular/compiler-cli": "^21.0.3",
+    "@types/file-saver": "^2.0.7",
+    "@types/node": "^25.6.0",
+    "jsdom": "^28.0.0",
+    "prettier": "^3.8.1",
+    "typescript": "~5.9.3",
+    "vitest": "^4.0.8"
+  }
+}

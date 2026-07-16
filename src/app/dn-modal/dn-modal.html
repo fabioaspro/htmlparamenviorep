@@ -1,0 +1,15 @@
+
+<div class="backdrop" *ngIf="visible">
+  <div class="modal">
+    <h2>{{ title }}</h2>
+    
+    <div class="modal-body">
+        <div [innerHTML]="message"></div>
+    </div>
+
+    <div class="actions">
+      <button class="btn cancel" (click)="fechar(false)">Não</button>
+      <button class="btn confirm" (click)="fechar(true)">Sim</button>
+    </div>
+  </div>
+</div>
