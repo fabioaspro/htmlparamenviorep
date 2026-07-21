@@ -38,16 +38,18 @@ export class ServerTotvsService {
     ];
   }
   //------------ Colunas Grid Importação Parametros de Envio de Reparos
-  obterColunasImp(): Array<PoTableColumn> {
+  obterColunasImpParam(): Array<PoTableColumn> {
     return [
       { property: 'iLinha',        label: "Linha", visible: false},
       { property: 'codEstabel',    label: "Estabel"}, 
       { property: 'descEstabel',   label: "Descrição"},
       { property: 'codItem',       label: "Item"}, 
       { property: 'descItem',      label: "Descrição"},
+      { property: 'tpControle',    label: "Tipo de Controle"},
       { property: 'lAtivo',        label: "Ativo"},
       { property: 'dtValidade',    label: "Validade"},
       { property: 'DtHrUsInc',     label: "Resultado"},
+      { property: 'cObs',          label: "Observação"},
       { property: 'opcao',         label: 'Ação', type: 'cellTemplate', visible: false},
       { property: 'DtHrUsAlt',     label: "Alteração", visible: false},
     ];

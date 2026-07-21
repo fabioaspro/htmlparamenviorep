@@ -127,8 +127,6 @@ export class Telacarga {
   readonly opcoes: PoTableAction[] = [
     { label: 'Editar', icon: 'bi bi-pencil-square', action: this.onAlterarGrid.bind(this) },
   ];
-
-
   
   acaoConfirmarDialog = {
     label: 'Efetivar',
@@ -159,7 +157,7 @@ export class Telacarga {
   ngOnInit(): void {
 
     //Colunas do grid
-    this.colunas = this.srvTotvs.obterColunasImp()
+    this.colunas = this.srvTotvs.obterColunasImpParam()
 
   }
 
