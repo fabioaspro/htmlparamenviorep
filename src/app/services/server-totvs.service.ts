@@ -1,8 +1,8 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Subject, map, of, take, tap } from 'rxjs';
+import { Subject, catchError, map, of, take, tap } from 'rxjs';
 import { Observable } from 'rxjs';
-import { PoTableColumn } from '@po-ui/ng-components';
+import { PoNotificationService, PoTableColumn } from '@po-ui/ng-components';
 import { environment } from '../environments/environment'
 
 //--- Header somente para DEV
@@ -13,10 +13,10 @@ const headersTotvs = new HttpHeaders(environment.totvs_header)
 })
 export class ServerTotvsService {
   private reg!:any;
+  private srvNotification = inject(PoNotificationService);
+
   _url      = environment.totvs_url
   _urlGeral = environment.totvs_url_Geral
-  _url1     = environment.totvs_url_01
-  //_url2 = environment.totvs_url_02
 
   constructor(private http: HttpClient ) { }
 
@@ -26,25 +26,23 @@ export class ServerTotvsService {
       { property: 'iLinha',        label: "Linha", visible: false},
       { property: 'codEstabel',    label: "Estabel"}, 
       { property: 'descEstabel',   label: "Descrição"},
-      { property: 'codEmitente',   label: "Destino"}, 
-      { property: 'descEmitente',  label: "Descrição"},
       { property: 'codItem',       label: "Item"}, 
       { property: 'descItem',      label: "Descrição"},
+      { property: 'tpControle',    label: "Tipo de Controle"},
       { property: 'lAtivo',        label: "Ativo"},
       { property: 'dtValidade',    label: "Validade"},
-      { property: 'opcao',         label: 'Ação', type: 'cellTemplate' },
+      { property: 'opcao',         label: 'Ação', type: 'cellTemplate', width: '130px' },
       { property: 'DtHrUsInc',     label: "Inclusão"},
       { property: 'DtHrUsAlt',     label: "Alteração"},
+      { property: 'cObs',          label: "Observação"},
     ];
   }
-  //------------ Colunas Grid Importação
+  //------------ Colunas Grid Importação Parametros de Envio de Reparos
   obterColunasImp(): Array<PoTableColumn> {
     return [
       { property: 'iLinha',        label: "Linha", visible: false},
       { property: 'codEstabel',    label: "Estabel"}, 
       { property: 'descEstabel',   label: "Descrição"},
-      { property: 'codEmitente',   label: "Destino"}, 
-      { property: 'descEmitente',  label: "Descrição"},
       { property: 'codItem',       label: "Item"}, 
       { property: 'descItem',      label: "Descrição"},
       { property: 'lAtivo',        label: "Ativo"},
@@ -62,20 +60,50 @@ export class ServerTotvsService {
 
   //Retorno transformado no formato {label: xxx, value: yyyy}
   public ObterEstabelecimentos(params?: any) {
-    return this.http.get<any>(`${this._url}/ObterEstab`, { params: params, headers: headersTotvs })
-      .pipe(
-        map((item) => {
-          return item.items.map((item: any) => {
-            return {
-              label: item.codEstab + ' ' + item.nome,
-              value: item.codEstab,
-              codFilial: item.codFilial,
-            };
-          });
-        }),
-        take(1)
-      );
+    return this.http.get<any>(
+      `${this._url}/ObterEstab`,
+      { params, headers: headersTotvs }
+    ).pipe(
+      map((response: any) =>
+        (response?.items || []).map((item: any) => ({
+          label: `${item.codEstab} ${item.nome}`,
+          value: item.codEstab,
+          codFilial: item.codFilial
+        }))
+      ),
+      catchError(error => {
+        if (error.status === 404) {
+          this.srvNotification.warning('Endpoint ObterEstab indisponível.');
+        } else {
+          this.srvNotification.error('Endpoint ObterEstab indisponível.');
+        }
+        
+        return of([]);
+      }),
+      take(1)
+    );
   }
+
+  //Usando paginação
+  public ObterDadosPag(params?: any) {
+    return this.http.post(
+      `${this._url}/ObterDadosPag`,
+      params,
+      { headers: headersTotvs }
+    ).pipe(
+      catchError(error => {
+
+        if (error.status === 404) {
+          this.srvNotification.warning('Funcionalidade ainda não disponível.');
+        } else {
+          this.srvNotification.error('Erro ao consultar dados.');
+        }
+
+        return of([]);
+      }),
+      take(1)
+    );
+}
 
   //Retorno transformado no formato {label: xxx, value: yyyy}
   public ObterEmitente(params?: any){
@@ -83,9 +111,9 @@ export class ServerTotvsService {
                   map(item => { return item.items.map((item:any) =>  { return { label:item.codEmitente + ' ' + item.nomeAbrev, value: item.codEmitente, codFilial: item.codFilial } }) }), take(1));
   }
 
-  //---Efetivar alteração/inclusão do Transbordo
-  public onSalvarTransbordo(params?: any){
-    return this.http.post(`${this._url}/onSalvarTransbordo`, params, {headers:headersTotvs}).pipe(take(1))
+  //---Efetivar alteração/inclusão do cadastro
+  public onSalvarParametros(params?: any){
+    return this.http.post(`${this._url}/onSalvarParametros`, params, {headers:headersTotvs}).pipe(take(1))
   }
 
   //--- Procedure POST
@@ -110,13 +138,10 @@ export class ServerTotvsService {
 
   //--- Obter Arquivo
   public ObterArquivo(params?: any){
-    return this.http.get(`${this._url}/ObterArquivo`, {params:params, headers:headersTotvs}).pipe(take(1));
+    return this.http.get(`${this._urlGeral}/ObterArquivo`, {params:params, headers:headersTotvs}).pipe(take(1));
   }
   
-  //Usando paginação
-  public ObterDadosPag(params?: any){
-    return this.http.post(`${this._url}/ObterDadosPag`, params, {headers:headersTotvs}).pipe(take(1))
-  }
+  
 
   //############
   //--- urlGeral

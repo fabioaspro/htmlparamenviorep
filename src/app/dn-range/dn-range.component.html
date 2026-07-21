@@ -8,14 +8,67 @@
     </div>
 
 </div>
--->
-
+old
 <div class="range">
     <label>{{cLabel}}</label>
     <div class="conteudo">
-        <!--<input [type]="tipo" [(ngModel)]="value.inicial" class="po-input" />-->
+        <input [type]="tipo" [(ngModel)]="value.inicial" class="po-input" />
         <input class="po-input" [mask]="cmask" [type]="tipo" [(ngModel)]="cini" (ngModelChange)="retorno()"/> 
         <div class="border">até</div>
         <input class="po-input" [mask]="cmask" [type]="tipo" [(ngModel)]="cfim" (ngModelChange)="retorno()"/>
     </div>
+</div>
+-->
+<div class="range">
+
+  <label>{{ cLabel }}</label>
+
+  <div class="conteudo">
+
+    @if (modo === 'combo') {
+
+      <po-combo
+        [ngModel]="cini"
+        (ngModelChange)="ciniChange.emit($event)"
+        [p-options]="options"
+        p-clean="true">
+      </po-combo>
+
+    } @else {
+
+      <input
+        class="po-input"
+        [mask]="cmask"
+        [type]="tipo"
+        [(ngModel)]="cini"
+        (ngModelChange)="ciniChange.emit($event)">
+    }
+
+    
+
+    @if (modo === 'combo') {
+
+      <div class="border border-combo">até</div>
+
+      <po-combo
+        [ngModel]="cfim"
+        (ngModelChange)="cfimChange.emit($event)"
+        [p-options]="options"
+        p-clean="true">
+      </po-combo>
+
+    } @else {
+
+      <div class="border">até</div>
+
+      <input
+        class="po-input"
+        [mask]="cmask"
+        [type]="tipo"
+        [(ngModel)]="cfim"
+        (ngModelChange)="cfimChange.emit($event)">
+    }
+
+  </div>
+
 </div>

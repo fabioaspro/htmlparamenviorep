@@ -49,7 +49,7 @@ export class RpwComponent {
          this.labelPedExec='Pedido Execução'
          this.labelTimerDetail = ''
          this.telaTimer?.open()
-        this.cdr.detectChanges()
+         this.cdr.detectChanges()
       }
 
       //Num Pedido Exec para acompanhamento 

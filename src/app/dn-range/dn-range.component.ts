@@ -47,9 +47,12 @@ export class DnRangeComponent {
   @Input() clabel!:string
   @Input() cini:string=''
   @Input() cfim:string=''
-  @Output() ciniChange = new EventEmitter<string>();
-  @Output() cfimChange = new EventEmitter<string>();
+  @Output() ciniChange = new EventEmitter<string>()
+  @Output() cfimChange = new EventEmitter<string>()
  
+  @Input() modo: 'input' | 'combo' = 'input'
+  @Input() options: any[] = []
+
   retorno(): void {
     this.ciniChange.emit(this.cini)
     this.cfimChange.emit(this.cfim)

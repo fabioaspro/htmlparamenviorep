@@ -112,6 +112,10 @@
   width: 100%;
 }
 
+::ng-deep .po-table td {
+    padding: 5px !important;
+}
+
 /*antigo
 .filtros-container po-combo:nth-child(1),
 .filtros-container po-combo:nth-child(2){
@@ -192,4 +196,27 @@
 .confirm-box .linha.destaque strong {
   color: #c62828;
   font-weight: 600;
+}
+
+.range{
+    display: flex;
+    flex-direction: column;
+}
+ 
+.conteudo{
+    display: flex;
+}
+ 
+.border{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: gray;
+    background-color: lightgrey;
+    border: 1px solid black;
+    border-radius: 0;
+    width: 90px;
+    margin-left:-4px;
+    margin-right: -4px;
+    z-index: 99;
 }

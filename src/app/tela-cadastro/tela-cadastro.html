@@ -1,0 +1,461 @@
+
+<po-toolbar p-title="1.00.000 - HTMLPARAMENVIOREP - PARÂMETROS DE ENVIO DE REPAROS "
+  p-actions-icon="bi bi-question-circle"
+  [p-actions]="toolbarActions">
+</po-toolbar>
+
+  <app-dn-modal
+                [visible]="mostrarModal"
+                title="Excluir registro"
+                [message]="mensagemModal"
+                (confirm)="onConfirmarExclusao($event)">
+  </app-dn-modal>
+
+
+  <div class="cabec">
+    <div class="tipoBusca">
+      <po-button p-label="Atualizar"   (p-click)="ChamaObterDadosPag()"       p-icon="bi bi-arrow-clockwise"    p-kind="primary" style="margin-left: 5px;"  p-tooltip="Atualizar Tela" ></po-button>
+      <po-button p-label="Novo"        (p-click)="onIncluir('Inclusão')"  p-icon="bi bi-bag-plus"           p-kind="primary" style="margin-left: 5px;" p-tooltip="Novo Cadastro"></po-button>
+      <po-button p-label="Excluir"     (p-click)="onExcluirSelecionados()"    p-icon="bi bi-trash"              p-kind="primary" style="margin-left: 5px;" p-tooltip="Excluir Selecionados"></po-button>
+      <po-button p-label="RPW"         (p-click)="onRPW()"                    p-icon="bi bi-box-arrow-up-right" p-kind="primary" style="margin-left: 5px;" p-tooltip="Relatório via RPW"></po-button>
+      <po-button p-label="Carga"       (p-click)="onCarga()"                  p-icon="bi bi-upload"             p-danger="true"  style="margin-left: 5px;" p-tooltip="Cadastro via Carga"></po-button>
+        
+    </div>
+    <div class="filtros-container">
+
+      <form [formGroup]="form" class="campofiltros">
+        <po-combo formControlName="codEstabel"
+                  p-append-to-body="true"
+                    p-dropdown-width="auto"
+                  (p-change)="onEstabChange($event)" 
+                  p-clean="true" 
+                  [p-options]="listaEstabelecimentos"
+
+                  p-label="Estabelecimento" 
+                  p-icon="bi bi-pin-map" 
+                  [p-placeholder]="placeHolderEstabelecimento">
+          <ng-template p-combo-option-template let-option>
+            <div class="po-row">
+              <po-icon class="po-sm-2 po-md-3 po-lg-1" p-size="sm" p-icon="bi bi-pin-map"></po-icon>
+              <div class="po-sm-10 po-md-9 po-lg-11">
+                <div class="po-font-text-large-bold">{{ option.label }}</div>
+                <div class="po-font-text-smaller">Filial: {{ option.codFilial }}</div>
+              </div>
+            </div>
+          </ng-template>
+        </po-combo>
+        
+
+        <po-combo class="combo-full"
+                  p-label="Item" 
+                  formControlName="codItem"
+                  p-icon="bi bi-box-seam" 
+                  (p-change)="onItemChange($event)"
+                  [p-placeholder]="placeHolderItem"
+                  
+                  p-dropdown-width="auto"
+
+                  p-clean="true" 
+                  [p-clean]="true" 
+                  [p-options]="listaItens">
+            <ng-template p-combo-option-template let-option>
+            <div class="po-row">
+              <po-icon class="po-sm-2 po-md-3 po-lg-1" p-size="sm" p-icon="bi bi-box-seam"></po-icon>
+              <div class="po-sm-10 po-md-9 po-lg-11">
+                <div class="po-font-text-large-bold">{{ option.label }}</div>
+                <div class="po-font-text-smaller">Descrição: {{ option.descitem }}</div>
+              </div>
+            </div>
+          </ng-template>
+        </po-combo>
+        <po-combo p-label="Tipo de Controle" 
+                  formControlName="tpControle"
+                  p-icon="bi bi-diagram-3" 
+                  [p-options]="tipoControleOptions" 
+                  
+                  (p-change)="onEmitenteChange($event)"
+                  
+                  [p-placeholder]="placeHoldertpCont" 
+                  p-clean="true"
+                  [p-clean]="true">
+          <ng-template p-combo-option-template let-option>
+            <div class="po-row">
+              <po-icon class="po-sm-2 po-md-3 po-lg-1" p-size="sm" p-icon="bi bi-diagram-3"></po-icon>
+              <div class="po-sm-10 po-md-9 po-lg-11">
+                <div class="po-font-text-large-bold">{{ option.label }}</div>
+                <div class="po-font-text-smaller">Destino: {{ option.value }}</div>
+              </div>
+            </div>
+          </ng-template>
+        </po-combo>
+      </form>
+    </div>
+    
+  </div>
+
+  <!-- abas -->
+  <po-tabs #abas>
+
+    <po-tab
+      p-label="Parâmetros de envio"
+      [p-active]="abaAtiva === 'parametros'"
+      (p-click)="selecionarAba('parametros')">
+
+      <div class="grid">
+
+          <!--
+          <p style="font-size: 15px; font-weight: bold; margin-bottom: -40px;">Total de Registros: {{this.total}}</p>
+          -->
+          <p style="font-size: 12px; display: flex; justify-content: flex-begins; margin-right: 260px; margin-bottom: -52px;">
+            <btnDownload p-tooltip="Baixar Arquivo do RPW" [nomeArquivo]="arquivoParametros" [mostrarNomeArquivo]="false" style="height: 52px;" p-kind="tertiary"></btnDownload>
+          </p>
+          <p style="font-size: 15px; display: flex; justify-content: flex-end; margin-right: 325px; margin-bottom: -52px;">        
+            <po-button  p-tooltip="Listagem em Excel"  p-icon="an an-microsoft-excel-logo"  p-label=""  (p-click)="onExcel()"          p-kind="tertiary"> </po-button>
+            <po-button  p-tooltip="Pesquisa Avançada"  p-icon="bi bi-funnel"                p-label=""  (p-click)="onFiltroAvancado()" p-kind="tertiary"> </po-button>
+          </p>
+          <po-table #ttDados
+                    [p-items]="listaSelecaoFiltrada" 
+                    [p-columns]="colunas"
+                    [p-selectable]="true"
+                    [p-single-select]="false"
+
+                    [p-striped]="true" 
+                    p-container="true"
+                    
+                    p-sort="true"
+                    [p-height]="alturaGrid"
+                    [p-loading]="loadTela"
+                    [p-sort]="true"
+                    [p-hide-batch-actions]="true"                    
+                    [p-hide-table-search]="false" 
+                    [p-hide-columns-manager]="false" 
+                    [p-literals]="customLiterals"
+                    (p-show-more)="loadMoreItens()"
+                    [p-show-more-disabled]="disableShowMore"
+                    >
+                                
+            <ng-template p-table-cell-template let-column="column" let-row="row">
+              
+                @if(column.property === 'opcao'){
+                    <div class="menuGrid">
+                      <div>
+                        
+                        <span p-tooltip="Alterar" tooltip-position="top">
+                          <button class="btn" (click)="onAlterar(row)">
+                            <i class="bi bi-eraser-fill"></i>
+                          </button>
+                        </span>
+
+                        <span p-tooltip="Excluir" tooltip-position="top">
+                          <button class="btn" (click)="solicitarExclusao(row)">
+                            <i class="bi bi-trash"></i>
+                          </button>
+                        </span>
+
+                      </div>
+                    </div>
+                    
+                }
+            </ng-template>
+            
+          </po-table>
+      </div>
+
+    </po-tab>
+    
+    <po-tab
+        p-label="Tempo médio"
+        [p-active]="abaAtiva === 'tempo'"
+        (p-click)="selecionarAba('tempo')">
+
+    </po-tab>
+
+  </po-tabs>
+  <!--MODAIS-->
+  <po-modal #ChamaCadastro p-size="auto" p-title="Cadastro de Parâmetros [ {{ objSolic }} ]"  >
+
+      <po-divider p-label="Dados:"></po-divider>
+      
+          <po-widget>
+              <po-combo 
+                        [ngModel]="registroSelecionado.codEstabel"
+                        (p-change)="registroSelecionado.codEstabel = $event"
+                        name="codEstabel" 
+                        [p-disabled]="modoAlteracao" 
+                        
+                        [p-options]="listaEstabelecimentos" 
+                        p-icon="bi bi-pin-map" 
+                        p-label="Estabelecimento"  
+                        p-placeholder="Selecione um Estabelecimento">
+                  <ng-template p-combo-option-template let-option>
+                      <div class="po-row">
+          
+                          <po-icon class="po-sm-2 po-md-3 po-lg-1" p-size="sm" p-icon="bi bi-pin-map"></po-icon>
+                          <div class="po-sm-10 po-md-9 po-lg-11">
+                              <div class="po-font-text-large-bold">{{ option.label }}</div>
+                              <div class="po-font-text-smaller">Filial: {{ option.value }}</div>
+                          </div>
+                      </div>
+                  </ng-template>
+              </po-combo>
+  
+              <div class="item-row">
+
+                <po-input [(ngModel)]="registroSelecionado.codItem" 
+                          name="codItem"
+                          p-disabled="{{ modoAlteracao }}"
+                          class="item-codigo"
+                          p-label="Item"
+                          p-required 
+                          p-mask="99.999.99999-9@" 
+                          p-mask-format-model="true"
+                          (p-blur)="ChamaDescItem()">
+                </po-input>
+
+                <po-button
+                  class="item-search"
+                  p-icon="bi bi-search"
+                  p-kind="tertiary"
+                  p-tooltip="Pesquisar item"
+                  (p-click)="ChamaDescItem()">
+                </po-button>
+
+                <po-input [ngModel]="registroSelecionado.descItem"
+                          (p-change)="registroSelecionado.descItem = $event"
+                          name="descItem"
+                          class="item-descricao"
+                          p-label="Descrição"
+                          
+                          p-readonly>
+                </po-input>
+
+              </div>
+
+              <po-combo [ngModel]="registroSelecionado.tpControle"
+                        (p-change)="registroSelecionado.tpControle = $event"
+                        [p-disabled]="modoAlteracao" 
+                        name="tpControle" 
+                        [p-options]="tipoControleOptions" 
+                        p-icon="po-icon-manufacture"
+                        p-label="Tipo de Controle" 
+                        p-icon="bi bi-diagram-3" 
+
+                        p-placeholder="Selecione um Tipo de Controle">
+                  <ng-template p-combo-option-template let-option>
+                      <div class="po-row">
+                          <po-icon class="po-sm-2 po-md-3 po-lg-1" p-size="sm" p-icon="bi bi-diagram-3"></po-icon>
+                          
+                          <div class="po-sm-10 po-md-9 po-lg-11">
+                              <div class="po-font-text-large-bold">{{ option.label }}</div>
+                              <div class="po-font-text-smaller">Destino: {{ option.value }}</div>
+                          </div>
+                      </div>
+                  </ng-template>
+              </po-combo>
+
+          </po-widget>
+          <po-widget>
+              <div class="item-row switch-row">
+
+                <po-datepicker [(ngModel)]="registroSelecionado.dtValidade" 
+                               name="dtValidade"
+                               p-label="Data de Validade"> </po-datepicker>
+                <po-switch [ngModel]="registroSelecionado.lAtivo" 
+                          name="lAtivo" 
+                          (p-change)="registroSelecionado.lAtivo = $event" 
+                          p-label="Ativo" 
+                          p-label-off="Nao" 
+                          p-label-on="Sim"> </po-switch>
+
+              </div>
+
+              <po-textarea      [(ngModel)]="registroSelecionado.cObs"      
+              name="cObs"      
+              p-label="Observação"      
+              p-placeholder="Digite uma observação..."      
+                 p-auto-grow="true">
+
+              </po-textarea>
+                
+          </po-widget>
+
+      <po-modal-footer [p-disabled-align]="false">
+          <po-button p-label="true" p-label="Cancelar" (p-click)="FecharChamaCadastro()"> </po-button>
+          <po-button p-kind="primary" p-label="Confirmar" (p-click)="onConfirmar()"> </po-button>
+      </po-modal-footer>
+
+  </po-modal>
+
+  <po-modal #ChamaCadTempo p-size="auto" p-title="Cadastro de Tempo [ {{ objSolic }} ]"  >
+
+      <po-divider p-label="Dados:"></po-divider>
+      
+          <po-widget>
+              <po-combo 
+                        [ngModel]="registroSelecionado.codEstabel"
+                        (p-change)="registroSelecionado.codEstabel = $event"
+                        name="codEstabel" 
+                        [p-disabled]="modoAlteracao" 
+                        
+                        [p-options]="listaEstabelecimentos" 
+                        p-icon="po-icon-manufacture"
+                        p-label="Estabelecimento"  
+                        p-placeholder="Selecione um Estabelecimento">
+                  <ng-template p-combo-option-template let-option>
+                      <div class="po-row">
+          
+                          <span class="po-icon po-icon-manufacture po-sm-2 po-md-3 po-lg-1"> </span>
+                          <div class="po-sm-10 po-md-9 po-lg-11">
+                              <div class="po-font-text-large-bold">{{ option.label }}</div>
+                              <div class="po-font-text-smaller">Filial: {{ option.value }}</div>
+                          </div>
+                      </div>
+                  </ng-template>
+              </po-combo>
+
+              <po-combo [ngModel]="registroSelecionado.tpControle"
+                        (p-change)="registroSelecionado.tpControle = $event"
+                        [p-disabled]="modoAlteracao" 
+                        name="tpControle" 
+                        [p-options]="tipoControleOptions" 
+                        p-icon="po-icon-manufacture"
+                        p-label="Destino" p-placeholder="Selecione um Destino">
+                  <ng-template p-combo-option-template let-option>
+                      <div class="po-row">
+          
+                          <span class="po-icon po-icon-manufacture po-sm-2 po-md-3 po-lg-1"> </span>
+                          <div class="po-sm-10 po-md-9 po-lg-11">
+                              <div class="po-font-text-large-bold">{{ option.label }}</div>
+                              <div class="po-font-text-smaller">Destino: {{ option.value }}</div>
+                          </div>
+                      </div>
+                  </ng-template>
+              </po-combo>
+  
+              <div class="item-row">
+
+                <po-input [(ngModel)]="registroSelecionado.codItem" 
+                          name="codItem"
+                          p-disabled="{{ modoAlteracao }}"
+                          class="item-codigo"
+                          p-label="Item"
+                          p-required 
+                          p-mask="99.999.99999-9@" 
+                          p-mask-format-model="true"
+                          (p-blur)="ChamaDescItem()">
+                </po-input>
+
+                <po-button
+                  class="item-search"
+                  p-icon="bi bi-search"
+                  p-kind="tertiary"
+                  p-tooltip="Pesquisar item"
+                  (p-click)="ChamaDescItem()">
+                </po-button>
+
+                <po-input [ngModel]="registroSelecionado.descItem"
+                          (p-change)="registroSelecionado.descItem = $event"
+                          name="descItem"
+                          class="item-descricao"
+                          p-label="Descrição"
+                          
+                          p-readonly>
+                </po-input>
+
+              </div>
+          </po-widget>
+          <po-widget>
+              <div class="item-row switch-row">
+
+                <po-datepicker [(ngModel)]="registroSelecionado.dtValidade" 
+                               name="dtValidade"
+                               p-label="Data de Validade"> </po-datepicker>
+                <po-switch [ngModel]="registroSelecionado.lAtivo" 
+                          name="lAtivo" 
+                          (p-change)="registroSelecionado.lAtivo = $event" 
+                          p-label="Ativo" 
+                          p-label-off="Nao" 
+                          p-label-on="Sim"> </po-switch>
+
+              </div>
+                
+          </po-widget>
+
+      <po-modal-footer [p-disabled-align]="false">
+          <po-button p-label="true" p-label="Cancelar" (p-click)="FecharChamaCadastro()"> </po-button>
+          <po-button p-kind="primary" p-label="Confirmar" (p-click)="onConfirmar()"> </po-button>
+      </po-modal-footer>
+
+  </po-modal>
+
+  <po-modal #telaFiltroAvancado p-title="Filtro Avançado"
+                                p-size="md" 
+                                p-click-out="false" 
+                                [p-hide-close]="true"
+                                [p-primary-action]="acaoConfirmarFiltro" 
+                                [p-secondary-action]="acaoCancelarFiltro">
+      
+      <form [formGroup]="form">
+        
+          <div class="filtroAvancado">
+         
+            <dn-range [cLabel]="filtro.cLabelCodEstabel"  [(cini)]="filtro.valEstabIni"      [(cfim)]="filtro.valEstabFim"      type="text"   cmask="AAA"></dn-range>
+            <dn-range [cLabel]="filtro.cLabelItem"        [(cini)]="filtro.valItemIni"       [(cfim)]="filtro.valItemFim"       type="text"   cmask="AA.AAA.AAAAA-AA"></dn-range>
+            <dn-range [cLabel]="filtro.cLabeltpControle"  [(cini)]="filtro.valtpControleIni" [(cfim)]="filtro.valtpControleFim" type="number" cmask="00" modo="combo" [options]="tipoControleback"></dn-range>
+            
+            <!--
+            <div class="conteudo">
+                <label>Tipo de Controle</label>
+
+                <po-combo [ngModel]="filtro.valtpControleIni"  [p-options]="tipoControleOptions"></po-combo>
+                <div class="border">até</div>
+                <po-combo [ngModel]="filtro.valtpControleFim"  [p-options]="tipoControleOptions"></po-combo>
+            </div>
+            -->
+          </div>        
+
+      </form>
+    
+      <div class="limpar">
+        <po-button p-tooltip="Limpar Filtros"  p-icon="bi bi-eraser-fill" p-label="Limpar filtros" (p-click)="limparFiltros()" [p-disabled]="!filtrosAlterados"> </po-button>
+      </div>
+  </po-modal>
+
+  <po-modal #telaRPW p-title="Gerar relatório de Parâmetros via RPW"
+                                p-size="md" 
+                                p-click-out="false" 
+                                [p-hide-close]="true"
+                                [p-primary-action]="acaoConfirmarRPW" 
+                                [p-secondary-action]="acaoCancelarRPW">
+      
+      <form [formGroup]="form">
+        
+            <div class="filtroAvancado">
+          
+              <dn-range [cLabel]="filtro.cLabelCodEstabel"  [(cini)]="filtro.valEstabIni"      [(cfim)]="filtro.valEstabFim"      type="text"   cmask="AAA"></dn-range>
+              <dn-range [cLabel]="filtro.cLabelItem"        [(cini)]="filtro.valItemIni"       [(cfim)]="filtro.valItemFim"       type="text"   cmask="AA.AAA.AAAAA-AA"></dn-range>
+              <dn-range [cLabel]="filtro.cLabeltpControle"  [(cini)]="filtro.valtpControleIni" [(cfim)]="filtro.valtpControleFim" type="number" cmask="00" modo="combo" [options]="tipoControleback"></dn-range>
+            </div>        
+
+      </form>
+    
+      <div class="limpar">
+        <po-button p-tooltip="Limpar Filtros"  p-icon="bi bi-eraser-fill" p-label="Limpar filtros" (p-click)="limparFiltros()" [p-disabled]="!filtrosAlterados"> </po-button>
+      </div>
+  </po-modal>
+
+    <rpw-acomp [numPedExec]="numPedExec()" 
+               [intervalo]="5000" 
+               [tentativas]="50">
+    </rpw-acomp>
+
+    <po-modal #abrirArquivo [p-title]="nomeArquivo" p-size="auto" p-click-out="false" [p-primary-action]="acaoSair"
+                            [p-secondary-action]="acaoImprimir">
+  
+        <div innerHtml={{this.conteudoArquivo}} class="formatoTexto"></div>
+  
+    </po-modal>
+    
+    <po-modal #pdfModal p-title="Visualizar Documento" p-primary-action-label="Fechar">
+      <iframe *ngIf="pdfUrl" [src]="pdfUrl" width="100%" height="900px" style="border: none;"></iframe>
+    </po-modal>

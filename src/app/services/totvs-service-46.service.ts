@@ -1,10 +1,9 @@
-
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Subject, map, take, tap } from 'rxjs';
 import { Observable } from 'rxjs';
 import { environment } from '../environments/environment'
-import { PoTableColumn } from '@po-ui/ng-components';
+import { PoNotificationService, PoTableColumn } from '@po-ui/ng-components';
 
 //--- Header somente para DEV
 const headersTotvs = new HttpHeaders(environment.totvs_header)    
@@ -15,6 +14,7 @@ const headersTotvs = new HttpHeaders(environment.totvs_header)
 
 export class TotvsService46 {
   private reg!:any;
+  
   _url = environment.totvs46_url;
 
   constructor(private http: HttpClient ) { }
@@ -286,10 +286,6 @@ obterColunasArquivos(): Array<PoTableColumn> {
                    .pipe(take(1));
   }
 
-
-
-
-
    //Ordenacao campos num array
    public ordenarCampos =
    (fields: any[]) =>
@@ -304,7 +300,5 @@ obterColunasArquivos(): Array<PoTableColumn> {
          return a[o] > b[o] ? dir : a[o] < b[o] ? -dir : 0;
        })
        .reduce((p, n) => (p ? p : n), 0);
-
-
 
 }

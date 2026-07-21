@@ -4,9 +4,8 @@
 
 export const environment = {
   production: false,
-  totvs_url:       'https://hawebdev.dieboldnixdorf.com.br:8543/api/integracao/services/v1/apiesrr033', //desenv
+  totvs_url:       'https://hawebdev.dieboldnixdorf.com.br:8543/api/integracao/services/v1/apiparamenviorep', //desenv
   totvs_url_Geral: 'https://hawebdev.dieboldnixdorf.com.br:8543/api/integracao/utils/v1/apidngeral', //desenv
-  totvs_url_01:    'https://hawebdev.dieboldnixdorf.com.br:8543/api/integracao/services/v1/apiesrr033', //desenv
   totvs46_url:     'https://hawebdev.dieboldnixdorf.com.br:8543/api/integracao/aat/v1/apiesaa046',
   totvs_header:{
     'Content-Type': 'application/json',
